@@ -43,7 +43,7 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import { BiSearch, BiFilter, BiLogOut, BiRepeat } from "react-icons/bi";
 import { Button, Input, InputGroup, Stack } from "@chakra-ui/react";
 import { deleteCookie, getCookie } from "cookies-next";
-import { useCartStore } from "@/zustand/store";
+import { useCartStore } from "@/app/lib/store/store";
 import History from "./History";
 
 export const Navbar = () => {
@@ -92,49 +92,6 @@ export const Navbar = () => {
 
   return (
     <Box position={"sticky"} top={0} zIndex={10}>
-      <Flex
-        bg={"#003060"}
-        color={"white"}
-        p={"10px"}
-        display={{ base: "none", lg: "flex" }}
-      >
-        <Container maxW={1200}>
-          <HStack gap={10}>
-            <Flex gap={10} grow={1} color={"#0881DE"}>
-              <IconButton
-                size={"sm"}
-                aria-label="direct right"
-                icon={<FaTwitter />}
-                borderRadius={"50%"}
-                bgColor={"white"}
-              />
-              <IconButton
-                size={"sm"}
-                aria-label="direct right"
-                icon={<FaFacebookF />}
-                borderRadius={"50%"}
-                bgColor={"white"}
-              />
-              <IconButton
-                size={"sm"}
-                aria-label="direct right"
-                icon={<FaInstagram />}
-                borderRadius={"50%"}
-                bgColor={"white"}
-              />
-              <IconButton
-                size={"sm"}
-                aria-label="direct right"
-                icon={<FaYoutube />}
-                borderRadius={"50%"}
-                bgColor={"white"}
-              />
-            </Flex>
-
-            <Text>P.O.BOX CT6924 CANTONMENTS, ACCRA</Text>
-          </HStack>
-        </Container>
-      </Flex>
 
       <Box
         style={{
@@ -175,7 +132,7 @@ export const Navbar = () => {
                 <MenuList borderRadius={0}>
                   <MenuItem>
                     <Link
-                      _hover={{ background: "teal", transition: "0.5s" }}
+                      _hover={{ background: "#eff8ff", transition: "0.2s" }}
                       as={NextLink}
                       href="/"
                       p={2}
@@ -185,7 +142,7 @@ export const Navbar = () => {
                   </MenuItem>
                   <MenuItem>
                     <Link
-                      _hover={{ background: "teal", transition: "0.5s" }}
+                      _hover={{ background: "#eff8ff", transition: "0.2s" }}
                       as={NextLink}
                       href="/about"
                       p={2}
@@ -195,7 +152,7 @@ export const Navbar = () => {
                   </MenuItem>
                   <MenuItem>
                     <Link
-                      _hover={{ background: "teal", transition: "0.5s" }}
+                      _hover={{ background: "#eff8ff", transition: "0.2s" }}
                       as={NextLink}
                       href="/signup"
                       p={2}
@@ -205,7 +162,7 @@ export const Navbar = () => {
                   </MenuItem>
                   <MenuItem>
                     <Link
-                      _hover={{ background: "teal", transition: "0.5s" }}
+                      _hover={{ background: "#eff8ff", transition: "0.2s" }}
                       as={NextLink}
                       href="/signup"
                       p={2}
@@ -215,7 +172,7 @@ export const Navbar = () => {
                   </MenuItem>
                   <MenuItem>
                     <Link
-                      _hover={{ background: "teal", transition: "0.5s" }}
+                      _hover={{ background: "#eff8ff", transition: "0.2s" }}
                       as={NextLink}
                       href="/shop"
                       p={2}
@@ -237,7 +194,7 @@ export const Navbar = () => {
             >
               <Link
                 _hover={{
-                  color: "#B8E0F7",
+                  color: "#0881DE",
                   transition: "0.2s",
                   cursor: "pointer",
                 }}
@@ -249,7 +206,7 @@ export const Navbar = () => {
               </Link>
               <Link
                 _hover={{
-                  color: "#B8E0F7",
+                  color: "#0881DE",
                   transition: "0.2s",
                   cursor: "pointer",
                 }}
@@ -261,7 +218,7 @@ export const Navbar = () => {
               </Link>
               <Link
                 _hover={{
-                  color: "#B8E0F7",
+                  color: "#0881DE",
                   transition: "0.2s",
                   cursor: "pointer",
                 }}
@@ -273,7 +230,7 @@ export const Navbar = () => {
               </Link>
               <Link
                 _hover={{
-                  color: "#B8E0F7",
+                  color: "#0881DE",
                   transition: "0.2s",
                   cursor: "pointer",
                 }}
@@ -295,7 +252,7 @@ export const Navbar = () => {
               <Flex gap={5} align={"center"}>
                 <Link
                   fontSize="26px"
-                  _hover={{ color: "#B8E0F7", transition: "0.2s" }}
+                  _hover={{ color: "#0881DE", transition: "0.2s" }}
                   as={NextLink}
                   className={`link ${
                     pathname === "/shop/identifier/cart" ? "active" : ""

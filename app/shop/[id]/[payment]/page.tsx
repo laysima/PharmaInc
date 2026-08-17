@@ -28,11 +28,11 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import { GoDash } from "react-icons/go";
 import { GoLock } from "react-icons/go";
 import NextLink from "next/link";
-import { useCartStore } from "@/zustand/store";
+import { useCartStore } from "@/app/lib/store/store";
 import { BiTrash, BiX } from "react-icons/bi";
 import { usePaystackPayment } from 'react-paystack';
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CreateOrder } from "@/app/api";
+import { CreateOrder } from "@/app/lib/api-client";
 import { useRouter } from "next/navigation";
 
 export default function Payment({ params }: any) {

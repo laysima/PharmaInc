@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setCookie } from "cookies-next";
-import { LoginType, SignupType, ParseInitialRequestType, DiagnosisRequestType, CreateOrderType } from '@/schemas';
+import { LoginType, SignupType, ParseInitialRequestType, DiagnosisRequestType, CreateOrderType } from '@/app/lib/schemas';
 
 
 const client = axios.create({

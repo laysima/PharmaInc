@@ -5,7 +5,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React, { useState } from "react";
-import { SendOtp, VerifyOtp, ResetPassword } from "../api";
+import { SendOtp, VerifyOtp, ResetPassword } from "../lib/api-client";
 import { useRouter } from "next/navigation";
 
 const ForgotPassword = () => {
@@ -109,7 +109,7 @@ const ForgotPassword = () => {
 
   return (
     <Box
-      bgImage={"url('./hexagon.jpg')"}
+      bgImage={"url('/hexagon.jpg')"}
       width={"full"}
       h={"100vh"}
       bgSize={"cover"}

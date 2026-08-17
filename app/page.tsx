@@ -1,939 +1,445 @@
 "use client";
 import { useState } from "react";
 import NextLink from "next/link";
-import ScrollAnimationBox from "@/app/components/ScrollAnimationBox";
-import PageWrap from "./components/PageWrap";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import { getCookie } from "cookies-next";
+
+import ScrollProgressBar from "./components/ScrollProgressBar";
+import Reveal from "./components/ui/Reveal";
+import AuroraBackground from "./components/ui/AuroraBackground";
+import GradientButton from "./components/ui/GradientButton";
+import BentoCard from "./components/ui/BentoCard";
+import Counter from "./components/ui/Counter";
+import Marquee from "./components/ui/Marquee";
+
 import {
-  Box,
-  Button,
-  Flex,
-  Text,
-  SimpleGrid,
-  GridItem,
-  Divider,
-  Image,
-  Heading,
-  Link,
-  Icon,
-  Container,
-  Avatar,
-} from "@chakra-ui/react";
-import { PiHandshakeLight } from "react-icons/pi";
-import { IoMdHeartEmpty } from "react-icons/io";
-import { GoPersonAdd } from "react-icons/go";
-import { IoTrophyOutline } from "react-icons/io5";
-import { FaCheckCircle, FaDumbbell, FaRegPlusSquare } from "react-icons/fa";
+  FaCheckCircle,
+  FaDumbbell,
+  FaChevronDown,
+} from "react-icons/fa";
 import { FaHandsHoldingChild } from "react-icons/fa6";
 import { TbDentalBroken, TbActivityHeartbeat } from "react-icons/tb";
 import { LiaHeartbeatSolid } from "react-icons/lia";
 import { MdOutlineHealthAndSafety } from "react-icons/md";
+import { PiHandshakeLight } from "react-icons/pi";
+import { IoMdHeartEmpty } from "react-icons/io";
+import { GoPersonAdd } from "react-icons/go";
+import { IoTrophyOutline } from "react-icons/io5";
 
 import "./globals.css";
 
-import { getCookie } from "cookies-next";
-import { motion } from "framer-motion";
-import dynamic from 'next/dynamic'
-import ScrollProgressBar from "./components/ScrollProgressBar";
+const DynamicChatbot = dynamic(() => import("./components/Chatbot"), { ssr: false });
 
-const DynamicChatbot = dynamic(() => import('./components/Chatbot'), { ssr: false })
-const DynamicTermsOfService = dynamic(() => import('./components/TermsOfService'))
+const stats = [
+  { value: 123, suffix: "+", label: "Professional Staff" },
+  { value: 587, suffix: "+", label: "Kind Of Medicine" },
+  { value: 40, suffix: "+", label: "Doctor Specialists" },
+  { value: 12, suffix: "+", label: "Active Members" },
+];
+
+const trustStats = [
+  { icon: PiHandshakeLight, value: 200, suffix: "k+", label: "Happy clients" },
+  { icon: IoMdHeartEmpty, value: 50, suffix: "k+", label: "Orders delivered" },
+  { icon: GoPersonAdd, value: 80, suffix: "+", label: "Areas served" },
+  { icon: IoTrophyOutline, value: 5, suffix: "L", label: "Medicines" },
+];
+
+const services = [
+  { icon: TbDentalBroken, title: "Dental Wellness" },
+  { icon: FaHandsHoldingChild, title: "Accessibility" },
+  { icon: MdOutlineHealthAndSafety, title: "Health Products" },
+  { icon: FaDumbbell, title: "Wellness Products" },
+];
+
+const categories = [
+  { image: "/funbact.rem.png", title: "Ointment" },
+  { image: "/gummies.png", title: "Vitamins" },
+  { image: "/panadol.png", title: "Pain Capsules" },
+  { image: "/sleeve.png", title: "Sleeve" },
+];
+
+const testimonials = [
+  {
+    name: "Shakur",
+    country: "Ghana",
+    image: "/w1.jpg",
+    review:
+      "PharmaInc is a game-changer. It's easy to use, fast, and reliable — I can order my medications in a few clicks.",
+  },
+  {
+    name: "Calvin",
+    country: "United Kingdom",
+    image: "/m2.jpg",
+    review:
+      "The interface is intuitive and delivery is always on time. Managing my prescriptions has never been easier.",
+  },
+  {
+    name: "Jessie",
+    country: "United States",
+    image: "/m1.jpg",
+    review:
+      "As someone with chronic health issues, recurring orders and reminders mean I never run out of essentials.",
+  },
+];
+
+const faqItems = [
+  {
+    id: 1,
+    question: "What kind of services do you offer?",
+    answer:
+      "Real-time order and delivery tracking for prescriptions and medications, keeping you informed every step of the way.",
+  },
+  {
+    id: 2,
+    question: "Is your clinic open 24hrs?",
+    answer: "Yes, our clinic operates 24/7 so you can get care whenever you need it.",
+  },
+  {
+    id: 3,
+    question: "How can I book an appointment?",
+    answer: "Book directly through the website, or call our customer service hotline.",
+  },
+  {
+    id: 4,
+    question: "Do you offer online consultations?",
+    answer: "Yes — online consultations with our medical specialists are available on demand.",
+  },
+];
 
 export default function Home() {
-  const [openedItemId, setOpenedItemId] = useState(null);
+  const [openedItemId, setOpenedItemId] = useState<number | null>(null);
   const user = getCookie("user");
-  const nUser = user && JSON.parse(user);
+  const nUser = user ? JSON.parse(user) : null;
 
-  const variants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-      },
-    },
-  };
-
-  const images = {
-    hidden: {
-      opacity: 0,
-      y: 40,
-    },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 2,
-      },
-    },
-  };
-
-  const toggleItem = (itemId: any) => {
-    if (openedItemId === itemId) {
-      // If the clicked item is already open, close it
-      setOpenedItemId(null);
-    } else {
-      // Open the clicked item and close others
-      setOpenedItemId(itemId);
-    }
-  };
-
-  const faqItems = [
-    {
-      id: 1,
-      question: "What kind of services do you offer?",
-      answer:
-        "Track orders and deliveries: Provide real-time updates on the status of prescriptions and medication deliveries, keeping patients informed and reducing anxiety.",
-    },
-    {
-      id: 2,
-      question: "Is your clinic open 24hrs?",
-      answer:
-        "Yes, our clinic operates 24/7 to ensure you receive the medical care you need at any time.",
-    },
-    {
-      id: 3,
-      question: "How can I book an appointment?",
-      answer:
-        "You can book an appointment through our website or by calling our customer service hotline.",
-    },
-    {
-      id: 4,
-      question: "Do you offer online consultations?",
-      answer:
-        "Yes, we provide online consultations with our medical specialists to ensure your health concerns are addressed promptly.",
-    },
-  ];
+  const toggleItem = (id: number) => setOpenedItemId(openedItemId === id ? null : id);
 
   return (
     <>
       <ScrollProgressBar />
-     
-      <PageWrap>
-        <Box>
-          <Container maxW={1200} pb={40}>
-            <Flex gap={6}>
-              <Box mt={"90px"}>
-                <Flex alignItems="center">
-                  <Flex>
-                    <Box>
-                      <Heading
-                        fontFamily='"Outfit", sans-serif'
-                        fontSize="4xl"
-                      >
-                        {nUser ? (
-                          <>Welcome, {nUser.name}! 👋</>
-                        ) : (
-                          <>Welcome to PharmaInc! 👋</>
-                        )}
-                      </Heading>
-                      <Text maxW={400} mt={10} color={""} mb={10} fontSize="lg">
-                        Your Compassionate Ally in Navigating the Path to Optimal
-                        Health and Wellness is here.
-                      </Text>
-                      
-                    </Box>
-                  </Flex>
-                </Flex>
 
-                {/* Linking Buttons */}
-                <Flex gap={5} mb={10} position="relative" zIndex="1">
-                  <Link as={NextLink} href="/shop">
-                    <Button borderRadius={5} colorScheme="blue">
-                      Shop Now
-                    </Button>
-                  </Link>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-white">
+        <AuroraBackground />
+        <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-20 md:pt-28">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <Reveal>
+              <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-700">
+                Your health, delivered
+              </p>
+              <h1 className="text-4xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
+                {nUser ? (
+                  <>Welcome back, {nUser.name}.</>
+                ) : (
+                  <>
+                    Care that meets you <span className="text-primary-600">where you are.</span>
+                  </>
+                )}
+              </h1>
+              <p className="mt-6 max-w-md text-lg text-slate-600">
+                Your compassionate ally in navigating the path to optimal health and
+                wellness — medication, guidance, and delivery, all in one place.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <NextLink href="/shop">
+                  <GradientButton>Shop Now</GradientButton>
+                </NextLink>
+                <DynamicChatbot />
+              </div>
+            </Reveal>
 
-                  <DynamicChatbot/>
-                </Flex>
-              </Box>
-
-              <Flex
-                direction={"column"}
-                pl={"20px"}
-                pt={"100px"}
-                gap={10}
-                display={{ base: "none", lg: "flex" }}
-              >
-                <Icon
-                  color={"#D9D9D9"}
-                  fontSize={"50px"}
-                  as={LiaHeartbeatSolid}
-                />
-                <Icon
-                  color={"#D9D9D9"}
-                  fontSize={"50px"}
-                  as={TbActivityHeartbeat}
-                  ml={"20px"}
-                />
-                <Icon
-                  color={"#D9D9D9"}
-                  transform="rotate(10deg)"
-                  fontSize={"50px"}
-                  as={FaRegPlusSquare}
-                />
-              </Flex>
-
-              <Flex
-                direction={"column"}
-                gap={2}
-                pt={"60px"}
-                pl={"200px"}
-                display={{ base: "none", lg: "flex" }}
-              >
-                <Flex gap={3} justify={"flex-end"}>
-                  <Flex
-                    h={150}
-                    w={150}
-                    borderRadius={10}
-                    bgImage={"sick1.jpg"}
-                    bgSize={"cover"}
-                    bgPos={"center"}
-                  ></Flex>
-                  <Flex
-                    h={150}
-                    w={150}
-                    borderRadius={10}
-                    bgImage={"sick5.jpg"}
-                    bgSize={"cover"}
-                    bgPos={"center"}
-                  ></Flex>
-                </Flex>
-
-                <Flex gap={3}>
-                  <Flex
-                    h={150}
-                    w={150}
-                    borderRadius={10}
-                    bgImage={"sick3.jpg"}
-                    bgSize={"cover"}
-                    bgPos={"center"}
-                  ></Flex>
-                  <Flex
-                    h={150}
-                    w={150}
-                    borderRadius={10}
-                    bgImage={"sick4.jpg"}
-                    bgSize={"cover"}
-                    bgPos={"center"}
-                  ></Flex>
-                </Flex>
-              </Flex>
-            </Flex>
-          </Container>
-
-          {/*////////////////////////////////// Categories 2.000000 ////////////////////////////////// */}
-          <Box pb={40}>
-            <Box
-              p={20}
-              bgImage={"hbeds.jpg"}
-              objectFit={"cover"}
-              bgSize={"cover"}
-            >
-              <Flex
-                direction={"column"}
-                color={"white"}
-                justify={"right"}
-                align={"right"}
-                textAlign={"right"}
-                p={10}
-                pos={"relative"}
-              >
-                <Text color={"#B8E0F7"}>THE BEST PHARMAY STORE</Text>
-                <Text fontSize={"4xl"} fontWeight={500} letterSpacing={"0px"}>
-                  We Have The Most Complete Medicine And Vitamins
-                </Text>
-
-                <Text mt={5} color={"#B8E0F7"}>
-                  Pharmacy Web App is a life-saver. I can now manage my
-                  medications from the comfort of my home.{" "}
-                </Text>
-
-                <Link as={NextLink} href="/shop">
-                  <Button mt={5} bg="#E3E7F1">
-                    SHOP NOW
-                  </Button>
-                </Link>
-              </Flex>
-            </Box>
-
-            <Flex
-              justify={"center"}
-              align={"center"}
-              display={{ base: "none", lg: "flex" }}
-            >
-              <Box
-                borderRadius={20}
-                bg={"white"}
-                mt={-10}
-                p={5}
-                boxShadow={"1px 1px 2px grey, 0 0 25px grey"}
-                pos={"absolute"}
-                h={"15vh"}
-                w={"80%"}
-              >
-                <Flex justifyContent={"space-between"} alignItems={"center"}>
-                  <Flex direction={"column"}>
-                    <Text color={"#0881DE"} fontWeight={500} fontSize={"4xl"}>
-                      123+
-                    </Text>
-
-                    <Text>Professional Staff</Text>
-                  </Flex>
-                  <Divider
-                    orientation="vertical"
-                    h={"8vh"}
-                    border={"0.5px solid grey"}
-                  />
-
-                  <Flex direction={"column"} alignItems={"center"}>
-                    <Text color={"#0881DE"} fontWeight={500} fontSize={"4xl"}>
-                      587+
-                    </Text>
-
-                    <Text>Kind Of Medicine</Text>
-                  </Flex>
-                  <Divider
-                    orientation="vertical"
-                    h={"8vh"}
-                    border={"0.5px solid grey"}
-                  />
-
-                  <Flex direction={"column"} alignItems={"center"}>
-                    <Text color={"#0881DE"} fontWeight={500} fontSize={"4xl"}>
-                      40+
-                    </Text>
-
-                    <Text>Doctor Specialist</Text>
-                  </Flex>
-                  <Divider
-                    orientation="vertical"
-                    h={"8vh"}
-                    border={"0.5px solid grey"}
-                  />
-
-                  <Flex direction={"column"} alignItems={"center"}>
-                    <Text color={"#0881DE"} fontWeight={500} fontSize={"4xl"}>
-                      12+
-                    </Text>
-
-                    <Text>Active Members</Text>
-                  </Flex>
-                </Flex>
-              </Box>
-            </Flex>
-          </Box>
-
-          {/* /////////////////////////////////////// Offers  Grids /////////////////////////////////*/}
-          <Box bg={"#F8F8F8"} pt={20} pb={40}>
-            <Container maxW={1200}>
-              <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} gap={2}>
-                {/* grid 1 */}
-                <GridItem
-                  p={2}
-                  rowSpan={2}
-                  bgImage="koflet_coughMixture.png"
-                  color={"white"}
-                  bgColor={"rgba(0, 0, 0, 0.9)"}
-                  bgSize={"cover"}
-                  bgPos={"center"}
-                  borderRadius={40}
-                >
-                  <Heading
-                    alignItems={"center"}
-                    p={5}
-                    fontFamily={'"Outfit", sans-serif'}
-                    fontSize="2xl"
-                  >
-                    SPECIAL OFFERS ON
-                  </Heading>
-                  <Text mr={3} textAlign={"right"} fontSize={"xl"}>
-                    Cough Syrup
-                  </Text>
-                  <Flex justifyContent="flex-end">
-                    <Link as={NextLink} href="/shop">
-                      <Button
-                        textDecorationLine={"none"}
-                        color="#378ba4"
-                        borderRadius={"20px"}
-                        mt={5}
-                      >
-                        SHOP NOW
-                      </Button>
-                    </Link>
-                  </Flex>
-                </GridItem>
-
-                {/* grid 2 */}
-                <GridItem
-                  p={2}
-                  rowSpan={2}
-                  bgImage="vitamins.png"
-                  color={"white"}
-                  bgColor={"rgba(0, 0, 0, 0.9)"}
-                  bgSize={"cover"}
-                  bgPos={"center"}
-                  borderRadius={40}
-                >
-                  <Heading
-                    mr={3}
-                    mt={5}
-                    alignItems={"right"}
-                    fontFamily={'"Outfit", sans-serif'}
-                    fontSize="2xl"
-                  >
-                    MULTIVITAMIN
-                  </Heading>
-                  <Heading
-                    mr={3}
-                    alignItems={"right"}
-                    fontFamily={'"Outfit", sans-serif'}
-                    fontSize="2xl"
-                  >
-                    TABLETS
-                  </Heading>
-                  <Text mr={3} textAlign={"right"} fontSize={"xl"} mt={10}>
-                    Get 20% off and Stabilize
-                  </Text>
-                  <Flex justifyContent="flex-end">
-                    <Link as={NextLink} href="/shop">
-                      <Button
-                        textDecorationLine={"none"}
-                        mr={2}
-                        colorScheme="purple"
-                        borderRadius={"20px"}
-                        mt={7}
-                      >
-                        SHOP NOW
-                      </Button>
-                    </Link>
-                  </Flex>
-                </GridItem>
-
-                {/* grid 3 */}
-                <GridItem
-                  p={2}
-                  colSpan={{ base: 2 }}
-                  bgImage="paracetamol2.jpg"
-                  color={"white"}
-                  bgColor={"rgba(0, 0, 0, 0.5)"}
-                  bgSize={"cover"}
-                  bgPos={"center"}
-                  borderRadius={40}
-                >
-                  <Heading
-                    fontFamily={'"Outfit", sans-serif'}
-                    fontSize="2xl"
-                    mt={5}
-                    mr={3}
-                    textAlign={"right"}
-                  >
-                    30% DISCOUNT ON
-                  </Heading>
-                  <Text mr={2} textAlign={"right"} fontSize={"xl"}>
-                    Paracetamol
-                  </Text>
-                  <Flex justifyContent="flex-end">
-                    <Link as={NextLink} href="/shop" textAlign={"right"}>
-                      <Button
-                        mr={2}
-                        colorScheme="blackAlpha"
-                        borderRadius={"20px"}
-                        mt={5}
-                      >
-                        SHOP NOW
-                      </Button>
-                    </Link>
-                  </Flex>
-                </GridItem>
-
-                {/* grid 4 */}
-                <GridItem
-                  p={2}
-                  rowSpan={1}
-                  bgImage="sth.jpg"
-                  color={"white"}
-                  bgColor={"green"}
-                  bgSize={"cover"}
-                  bgPos={"center"}
-                  borderRadius={40}
-                >
-                  <Heading
-                    fontFamily={'"Outfit", sans-serif'}
-                    fontSize="2xl"
-                    mt={5}
-                    mr={3}
-                    textAlign={"right"}
-                  >
-                    30% DISCOUNT ON
-                  </Heading>
-                  <Text mr={2} textAlign={"right"} fontSize={"xl"}>
-                    Paracetamol
-                  </Text>
-                  <Flex justifyContent="flex-end">
-                    <Link as={NextLink} href="/shop">
-                      <Button mr={2} bg={"#05abc4"} borderRadius={"20px"} mt={5}>
-                        SHOP NOW
-                      </Button>
-                    </Link>
-                  </Flex>
-                </GridItem>
-
-                {/* grid 5 */}
-                <GridItem
-                  p={2}
-                  colSpan={1}
-                  bgImage="capsules.jpg"
-                  color={"white"}
-                  bgColor={"red"}
-                  bgSize={"cover"}
-                  bgPos={"center"}
-                  borderRadius={40}
-                >
-                  <Text
-                    mr={3}
-                    mt={12}
-                    textAlign={"right"}
-                    fontSize={"xl"}
-                    fontWeight={"900"}
-                  >
-                    Cough Syrup
-                  </Text>
-                  <Heading
-                    fontFamily={'"Outfit", sans-serif'}
-                    fontSize="2xl"
-                    mt={5}
-                    mr={3}
-                    textAlign={"right"}
-                  >
-                    30% DISCOUNT ON
-                  </Heading>
-                  <Flex justifyContent="flex-end">
-                    <Link as={NextLink} href="/">
-                      <Button
-                        mr={2}
-                        colorScheme="linkedin"
-                        borderRadius={"20px"}
-                        mt={15}
-                      >
-                        SHOP NOW
-                      </Button>
-                    </Link>
-                  </Flex>
-                </GridItem>
-              </SimpleGrid>
-            </Container>
-          </Box>
-
-          {/* ///////////////////////////////some other section  part 1/////////////////////////*/}
-          <Container maxW={1200} py={20}>
-            <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={10}>
-              <Box>
-                <Box bg={"#0881DE"} mb={6}>
-                  <Text
-                    color={"white"}
-                    p={5}
-                    fontWeight={600}
-                    fontFamily={'"Outfit", sans-serif'}
-                    fontSize={"xl"}
-                  >
-                    Excellent Medical Professionals With Significant Experience
-                  </Text>
-                </Box>
-                <Text fontSize={"lg"} mb={6}>
-                  Tristique senectus et netus et malesuada fames ac turpis. Turpis
-                  massa tincidunt dui ut ornare lectus sit amet. Viverra orci
-                  sagittis eu volutpat odio facilisis mauris sit amet.
-                </Text>
-                <Link as={NextLink} href="/shop">
-                  <Button
-                    fontSize={"sm"}
-                    mb={8}
-                    px={8}
-                    py={4}  
-                    variant={"outline"}
-                    colorScheme="blue"
-                  >
-                    SHOP NOW
-                  </Button>
-                </Link>
-
-                <SimpleGrid columns={2} spacing={8}>
-                  {[
-                    { icon: PiHandshakeLight, title: "200k +", subtitle: "Happy clients" },
-                    { icon: IoMdHeartEmpty, title: "50k +", subtitle: "Orders delivered" },
-                    { icon: GoPersonAdd, title: "80 +", subtitle: "Area Served" },
-                    { icon: IoTrophyOutline, title: "5L", subtitle: "Medicines" },
-                  ].map((item, index) => (
-                    <Flex key={index} alignItems={"center"} gap={4}>
-                      <Icon as={item.icon} fontSize={"3xl"} color={"#0881DE"} />
-                      <Box>
-                        <Heading
-                          color={"#175873"}
-                          fontSize={"2xl"}
-                          fontFamily={'"Outfit", sans-serif'}
-                        >
-                          {item.title}
-                        </Heading>
-                        <Text color={"gray.600"}>{item.subtitle}</Text>
-                      </Box>
-                    </Flex>
-                  ))}
-                </SimpleGrid>
-              </Box>
-
-              <Box position="relative">
-                <Image
-                  borderRadius={"lg"}
-                  w={"full"}
-                  h={"60dvh"}
-                  objectFit={"cover"}
-                  src="m3.jpg"
-                  alt='Medical professionals'
-                />
-                <Flex
-                  position="absolute"
-                  top={-10}
-                  right={-5}
-                  bg="white"
-                  borderRadius="full"
-                  boxSize={"200px"}
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                  boxShadow="lg"
-                >
-                  <Text color={"#0881DE"} fontSize={"3xl"} fontWeight="bold">
-                    Beginner+
-                  </Text>
-                  <Text fontSize={"xl"} textAlign="center">
-                    Company
-                  </Text>
-                </Flex>
-              </Box>
-            </SimpleGrid>
-          </Container>
-
-          {/* Services Section */}
-          <Box bg="gray.50" py={20}>
-            <Container maxW={1200}>
-              <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={8}>
+            <Reveal delay={0.15}>
+              <div className="grid grid-cols-2 gap-4">
                 {[
-                  { icon: TbDentalBroken, title: "Dental Wellness" },
-                  { icon: FaHandsHoldingChild, title: "Accessibility" },
-                  { icon: MdOutlineHealthAndSafety, title: "Health Products" },
-                  { icon: FaDumbbell, title: "Wellness Products" },
-                ].map((service, index) => (
-                  <Flex
-                    key={index}
-                    direction="column"
-                    align="center"
-                    p={6}
-                    borderRadius="lg"
-                    bg="white"
-                    boxShadow="md"
-                    transition="all 0.3s"
-                    _hover={{ transform: "translateY(-5px)", boxShadow: "xl" }}
+                  { src: "/sick1.jpg", y: 0 },
+                  { src: "/sick5.jpg", y: 24 },
+                  { src: "/sick3.jpg", y: 24 },
+                  { src: "/sick4.jpg", y: 0 },
+                ].map((img, i) => (
+                  <div
+                    key={i}
+                    className="relative aspect-square overflow-hidden rounded-2xl shadow-card"
+                    style={{ marginTop: img.y }}
                   >
-                    <Flex
-                      borderRadius={"full"}
-                      mb={4}
-                      p={4}
-                      fontSize={"3xl"}
-                      bg={"#05abc4"}
-                      color={"white"}
-                    >
-                      <Icon as={service.icon} />
-                    </Flex>
-                    <Text fontWeight={600} fontSize={"xl"} textAlign="center">
-                      {service.title}
-                    </Text>
-                  </Flex>
+                    <Image src={img.src} alt="" fill sizes="200px" className="object-cover" />
+                  </div>
                 ))}
-              </SimpleGrid>
-            </Container>
-          </Box>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
 
-          {/* ////////////////////////////////////Other products ////////////////////////// */}
-          <Container maxW={1200} pt={40}>
-            <Box>
-              <Text
-                textAlign={"center"}
-                fontWeight={500}
-                fontSize={"4xl"}
-              >
-                Shop Our Categories
-                <Divider orientation="horizontal" color={'1px solid grey'} />
-              </Text>
+      {/* Banner + stats */}
+      <section className="relative">
+        <div className="relative h-[360px] w-full overflow-hidden md:h-[420px]">
+          <Image src="/hbeds.jpg" alt="" fill className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-950/80 via-primary-900/50 to-transparent" />
+          <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-center px-6 text-white">
+            <Reveal>
+              <p className="text-sm font-semibold uppercase tracking-widest text-primary-200">
+                The best pharmacy store
+              </p>
+              <h2 className="mt-3 max-w-xl text-3xl font-semibold leading-tight sm:text-4xl">
+                We have the most complete medicine and vitamins
+              </h2>
+              <p className="mt-4 max-w-lg text-primary-100">
+                PharmaInc is a life-saver — manage your medications from the comfort
+                of your home.
+              </p>
+              <NextLink href="/shop">
+                <GradientButton className="mt-6">Shop Now</GradientButton>
+              </NextLink>
+            </Reveal>
+          </div>
+        </div>
 
-              <Flex
-                p={4}
-                justifyContent={"space-evenly"}
-                textColor={"#0C1446"}
-                _hover={{ cursor: "pointer" }}
-                alignItems="center"
-              >
-                <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} gap={20} as={motion.div} variants={variants}
-                  initial="hidden"
-                  animate="show">
-                  <Box p={6} bg={"#F9F9F8"} border="1px" borderColor="#F9F9F8" as={motion.div} variants={images}>
-                    <Flex
-                      direction={"column"}
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Image
-                        src="funbact.rem.png"
-                        width="150px"
-                        height="200px"
-                        borderRadius={"50px"}
-                        mr={5}
-                        _hover={{
-                          transform: "scale(1.05)",
-                          transition: "transform 0.2s ease-in-out",
-                        }}
-                        alt='image'
-                      />
-                      <Heading
-                        mt={2}
-                        fontFamily={'"Outfit", sans-serif'}
-                        fontSize={"xl"}
-                      >
-                        Ointment
-                      </Heading>
-                    </Flex>
-                  </Box>
+        <div className="mx-auto -mt-10 hidden max-w-5xl px-6 md:block">
+          <Reveal>
+            <div className="grid grid-cols-4 divide-x divide-slate-100 rounded-2xl bg-white p-8 shadow-card">
+              {stats.map((s) => (
+                <div key={s.label} className="text-center">
+                  <p className="text-3xl font-semibold text-primary-600">
+                    <Counter value={s.value} suffix={s.suffix} />
+                  </p>
+                  <p className="mt-1 text-sm text-slate-500">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
-                  <Box p={6} bg={"#F9F9F8"} border="1px" borderColor="#F9F9F8" as={motion.div} variants={images}>
-                    <Flex
-                      direction={"column"}
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Image
-                        src="gummies.png"
-                        width="150px"
-                        height="200px"
-                        borderRadius={"50px"}
-                        mr={5}
-                        _hover={{
-                          transform: "scale(1.05)",
-                          transition: "transform 0.2s ease-in-out",
-                        }}
-                        alt='image'
-                      />
-                      <Heading
-                        mt={2}
-                        fontFamily={'"Outfit", sans-serif'}
-                        fontSize={"xl"}
-                      >
-                        Vitamins
-                      </Heading>
-                    </Flex>
-                  </Box>
+      {/* Offers bento grid */}
+      <section className="mx-auto max-w-6xl px-6 py-24">
+        <Reveal>
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
+            Offers
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold text-slate-900 sm:text-4xl">
+            Deals worth stocking up on
+          </h2>
+        </Reveal>
 
-                  <Box p={6} bg={"#F9F9F8"} border="1px" borderColor="#F9F9F8" as={motion.div} variants={images}>
-                    <Flex
-                      direction={"column"}
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Image
-                        src="panadol.png"
-                        width="150px"
-                        height="200px"
-                        borderRadius={"50px"}
-                        mr={5}
-                        _hover={{
-                          transform: "scale(1.05)",
-                          transition: "transform 0.2s ease-in-out",
-                        }}
-                        alt='image'
-                      />
-                      <Heading
-                        mt={2}
-                        fontFamily={'"Outfit", sans-serif'}
-                        fontSize={"xl"}
-                      >
-                        Pain Capsules
-                      </Heading>
-                    </Flex>
-                  </Box>
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:auto-rows-[170px]">
+          {[
+            { img: "/koflet_coughMixture.png", eyebrow: "Special offers on", title: "Cough Syrup", span: "md:row-span-2" },
+            { img: "/vitamins.png", eyebrow: "Multivitamin tablets", title: "Get 20% off", span: "md:row-span-2" },
+            { img: "/paracetamol2.jpg", eyebrow: "30% discount on", title: "Paracetamol", span: "md:col-span-2" },
+            { img: "/sth.jpg", eyebrow: "30% discount on", title: "Stethoscope kits", span: "" },
+            { img: "/capsules.jpg", eyebrow: "Bundle deal on", title: "Cough Syrup", span: "" },
+          ].map((offer, i) => (
+            <Reveal key={offer.title + i} delay={i * 0.06} className={offer.span}>
+              <BentoCard className="relative h-40 w-full md:h-full">
+                <Image src={offer.img} alt={offer.title} fill className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                  <p className="text-xs font-medium uppercase tracking-wide text-primary-200">
+                    {offer.eyebrow}
+                  </p>
+                  <p className="mt-1 text-lg font-semibold">{offer.title}</p>
+                  <NextLink
+                    href="/shop"
+                    className="mt-2 inline-block text-xs font-semibold text-white underline decoration-primary-300 underline-offset-4"
+                  >
+                    Shop now
+                  </NextLink>
+                </div>
+              </BentoCard>
+            </Reveal>
+          ))}
+        </div>
+      </section>
 
-                  <Box p={6} bg={"#F9F9F8"} border="1px" borderColor="#F9F9F8" as={motion.div} variants={images}>
-                    <Flex
-                      direction={"column"}
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Image
-                        src="sleeve.png"
-                        width="150px"
-                        height="200px"
-                        borderRadius={"50px"}
-                        mr={5}
-                        _hover={{
-                          transform: "scale(1.05)",
-                          transition: "transform 0.2s ease-in-out",
-                        }}
-                        alt='image'
-                      />
-                      <Heading
-                        mt={2}
-                        fontFamily={'"Outfit", sans-serif'}
-                        fontSize={"xl"}
-                      >
-                        Sleeve
-                      </Heading>
-                    </Flex>
-                  </Box>
-                </SimpleGrid>
-              </Flex>
-            </Box>
-          </Container>
+      {/* Professionals split */}
+      <section className="bg-primary-50/40 py-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-2">
+          <Reveal>
+            <div className="inline-block rounded-xl bg-primary-600 px-6 py-4 text-white shadow-glow">
+              <p className="font-semibold">
+                Excellent medical professionals with significant experience
+              </p>
+            </div>
+            <p className="mt-6 text-lg text-slate-600">
+              Our team blends clinical expertise with genuine care, so every
+              consultation and every order is handled with the attention it deserves.
+            </p>
+            <NextLink href="/shop">
+              <GradientButton variant="outline" className="mt-2">
+                Shop Now
+              </GradientButton>
+            </NextLink>
 
-          {/* ///////////////////// some other section part part 2 ///////////////////////// */}
-          <Container maxW={1200} pt={20} pb={20}>
-            <Flex p={"20px"} gap={5} alignItems={"center"}>
-              <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }}>
-                <Flex mt={20}>
-                  <Box width={"500px"} height={"auto"}>
+            <div className="mt-10 grid grid-cols-2 gap-8">
+              {trustStats.map((item) => (
+                <div key={item.label} className="flex items-center gap-4">
+                  <item.icon className="text-3xl text-primary-600" />
+                  <div>
+                    <p className="text-2xl font-semibold text-primary-900">
+                      <Counter value={item.value} suffix={item.suffix} />
+                    </p>
+                    <p className="text-sm text-slate-500">{item.label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.15}>
+            <div className="relative">
+              <div className="relative h-[420px] w-full overflow-hidden rounded-3xl shadow-card">
+                <Image src="/m3.jpg" alt="Medical professionals" fill className="object-cover" />
+              </div>
+              <div className="absolute -right-6 -top-8 flex h-40 w-40 flex-col items-center justify-center rounded-full bg-white text-center shadow-card">
+                <p className="text-2xl font-bold text-primary-600">Trusted+</p>
+                <p className="text-sm text-slate-600">Company</p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Services */}
+      <section className="mx-auto max-w-6xl px-6 py-24">
+        <Reveal className="text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
+            What we offer
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold text-slate-900 sm:text-4xl">
+            Services built around you
+          </h2>
+        </Reveal>
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {services.map((service, i) => (
+            <Reveal key={service.title} delay={i * 0.08}>
+              <BentoCard className="flex flex-col items-center p-8 text-center">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-600 text-2xl text-white">
+                  <service.icon />
+                </div>
+                <p className="text-lg font-semibold text-slate-800">{service.title}</p>
+              </BentoCard>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="bg-slate-50 py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
+              Browse
+            </p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900 sm:text-4xl">
+              Shop our categories
+            </h2>
+          </Reveal>
+          <div className="mt-12 grid grid-cols-2 gap-6 md:grid-cols-4">
+            {categories.map((cat, i) => (
+              <Reveal key={cat.title} delay={i * 0.08}>
+                <NextLink
+                  href="/shop"
+                  className="group flex flex-col items-center gap-4 rounded-2xl bg-white p-6 shadow-card transition-shadow hover:shadow-glow"
+                >
+                  <div className="relative h-32 w-32 overflow-hidden rounded-full">
                     <Image
-                      display={{ base: "none", md: "flex", lg: "flex" }}
-                      width={"full"}
-                      objectFit={"cover"}
-                      src="questions.jpg"
-                      bgRepeat={"no-repeat"}
-                      alt='image'
+                      src={cat.image}
+                      alt={cat.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-110"
                     />
-                  </Box>
-                </Flex>
+                  </div>
+                  <p className="font-semibold text-slate-800">{cat.title}</p>
+                </NextLink>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                <Flex direction={"column"} mt={20} width={"90%"} gap={10}>
-                  {faqItems.map((item) => (
-                    <Box key={item.id}>
-                      <Flex
-                        bg={"#F9F9F8"}
-                        p={"20px"}
-                        fontSize={"xl"}
-                        justifyContent={"space-between"}
-                        onClick={() => toggleItem(item.id)}
-                        cursor="pointer"
-                      >
-                        <Box>
-                          <Text fontSize={'lg'}>{item.question}</Text>
-                        </Box>
-                        <FaCheckCircle />
-                      </Flex>
-                      {openedItemId === item.id && (
-                        <Box
-                          p={"30px"}
-                          bg={"#F9F9F8"}
-                          fontSize={"sm"}
-                        >
-                          {item.answer}
-                        </Box>
-                      )}
-                    </Box>
-                  ))}
-                </Flex>
-              </SimpleGrid>
-            </Flex>
-          </Container>
+      {/* FAQ */}
+      <section className="mx-auto max-w-6xl px-6 py-24">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <Reveal>
+            <div className="relative hidden h-[420px] w-full overflow-hidden rounded-3xl shadow-card md:block">
+              <Image src="/questions.jpg" alt="" fill className="object-cover" />
+            </div>
+          </Reveal>
 
-          {/* section for newsletter and newsproduction section, based on current information or news that thr websites has gone through  */}
-          <Container maxW={1200} pb={20}>
-            <ScrollAnimationBox>
-              <Text
-                textAlign={"center"}
-                fontFamily={'"Outfit", sans-serif'}
-                color={"#0881DE"}
-                fontWeight={500}
-                mt={10}
-              >
-                Testimonials{" "}
-              </Text>
-            </ScrollAnimationBox>
-
-            <ScrollAnimationBox>
-              <Text
-                textAlign={"center"}
-                fontFamily={'"Outfit", sans-serif'}
-                fontSize={"3xl"}
-                fontWeight={500}
-              >
-                Member Feedback And Reviews
-              </Text>
-            </ScrollAnimationBox>
-
-            <Box py={10}>
-              <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
-                {[
-                  {
-                    name: "Shakur",
-                    country: "Ghana",
-                    image: "w1.jpg",
-                    review: "Pharmacy Web App is a game-changer in the pharmacy industry. It's easy to use, fast, and reliable. I can now order my medications with just a few clicks, and the service is top-notch. Highly recommended for saving time and money on medications."
-                  },
-                  {
-                    name: "Calvin",
-                    country: "United Kingdom",
-                    image: "m2.jpg",
-                    review: "I'm impressed with the efficiency of Pharmacy Web App. The user interface is intuitive, and the delivery is always on time. It has made managing my prescriptions so much easier. A must-try for anyone looking for a hassle-free pharmacy experience."
-                  },
-                  {
-                    name: "Jessie",
-                    country: "United States of America",
-                    image: "m1.jpg",
-                    review: "As someone with chronic health issues, Pharmacy Web App has been a lifesaver. The ability to set up recurring orders and the helpful reminders ensure I never run out of my essential medications. The customer service is exceptional too!"
-                  }
-                ].map((testimonial, index) => (
-                  <Box
-                    key={index}
-                    bg="white"
-                    boxShadow="lg"
-                    borderRadius="lg"
-                    p={6}
-                    transition="all 0.3s"
-                    _hover={{ transform: "translateY(-5px)" }}
+          <Reveal delay={0.1}>
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
+              FAQ
+            </p>
+            <h2 className="mt-2 mb-8 text-3xl font-semibold text-slate-900 sm:text-4xl">
+              Frequently asked questions
+            </h2>
+            <div className="space-y-3">
+              {faqItems.map((item) => (
+                <div key={item.id} className="overflow-hidden rounded-2xl bg-slate-50">
+                  <button
+                    onClick={() => toggleItem(item.id)}
+                    className="flex w-full items-center justify-between gap-4 p-5 text-left"
                   >
-                    <Flex direction="column" align="center">
-                      <Avatar
-                        size="xl"
-                        src={testimonial.image}
-                        mb={4}
-                        border="4px solid"
-                        borderColor="blue.500"
-                      />
-                      <Text fontSize="lg" fontWeight="bold" mb={2}>
-                        {testimonial.name}
-                      </Text>
-                      <Text fontSize="sm" color="gray.500" mb={4}>
-                        {testimonial.country}
-                      </Text>
-                      <Text textAlign="center" fontSize="sm" color="gray.600">
-                        &quot;{testimonial.review}&quot;
-                      </Text>
-                    </Flex>
-                  </Box>
-                ))}
-              </SimpleGrid>
-            </Box>
-          </Container>
+                    <span className="font-medium text-slate-800">{item.question}</span>
+                    <motion.span
+                      animate={{ rotate: openedItemId === item.id ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="shrink-0 text-primary-600"
+                    >
+                      <FaChevronDown />
+                    </motion.span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {openedItemId === item.id && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        <p className="px-5 pb-5 text-sm text-slate-600">{item.answer}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
-          {/* <Box p={5}>
-      <ScrollAnimationBox>
-        <Text fontSize="2xl" p={5} bg="blue.500" color="white" textAlign="center">
-          This content slides in from the bottom!
-        </Text>
-      </ScrollAnimationBox>
-      <ScrollAnimationBox>
-        <Text fontSize="2xl" p={5} bg="green.500" color="white" textAlign="center">
-          More sliding content!
-        </Text>
-      </ScrollAnimationBox>
-    </Box> */}
-        </Box>
-      </PageWrap>
+      {/* Testimonials */}
+      <section className="bg-primary-950 py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary-300">
+              Testimonials
+            </p>
+            <h2 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">
+              Member feedback and reviews
+            </h2>
+          </Reveal>
+        </div>
+
+        <div className="mt-12">
+          <Marquee>
+            {testimonials.map((t) => (
+              <div
+                key={t.name}
+                className="flex w-80 shrink-0 flex-col items-center rounded-2xl bg-white/5 p-6 text-center backdrop-blur"
+              >
+                <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-primary-400">
+                  <Image src={t.image} alt={t.name} fill className="object-cover" />
+                </div>
+                <p className="mt-4 font-semibold text-white">{t.name}</p>
+                <p className="text-sm text-primary-300">{t.country}</p>
+                <p className="mt-3 text-sm text-primary-100">&quot;{t.review}&quot;</p>
+              </div>
+            ))}
+          </Marquee>
+        </div>
+      </section>
     </>
   );
 }

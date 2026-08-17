@@ -35,7 +35,7 @@ import {
 } from '@chakra-ui/react'
 import { GoClock, GoSearch } from "react-icons/go";
 import { useQuery } from '@tanstack/react-query';
-import { orderHistory } from '../api';
+import { orderHistory } from '../lib/api-client';
 import { getCookie } from 'cookies-next';
 
 interface Order {

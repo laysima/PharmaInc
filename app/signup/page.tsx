@@ -29,9 +29,9 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { useState } from "react";
 import NextLink from "next/link";
 import React from "react";
-import { SignupSchema, SignupType } from "@/schemas";
+import { SignupSchema, SignupType } from "@/app/lib/schemas";
 import { Controller } from 'react-hook-form';
-import { SignInUser } from "@/app/api";
+import { SignInUser } from "@/app/lib/api-client";
 import { useRouter } from "next/navigation";
 
 const Signup = () => {
@@ -75,7 +75,7 @@ const Signup = () => {
 
   return (
     <Box
-      bgImage={"url('./hexagon.jpg')"}
+      bgImage={"url('/hexagon.jpg')"}
       width={"full"}
       minHeight={"100vh"} // Ensure the box takes at least full viewport height
       bgSize={"cover"}

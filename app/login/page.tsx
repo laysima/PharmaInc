@@ -11,8 +11,8 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import NextLink from "next/link";
 import React from "react";
-import { LoginSchema, LoginType } from "@/schemas";
-import { LoginUser } from "@/app/api";
+import { LoginSchema, LoginType } from "@/app/lib/schemas";
+import { LoginUser } from "@/app/lib/api-client";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
 
@@ -71,7 +71,7 @@ const Login = () => {
   return (
     <>
       <Box
-        bgImage={"url('./hexagon.jpg')"}
+        bgImage={"url('/hexagon.jpg')"}
         width={"full"}
         h={"100vh"}
         bgSize={"cover"}

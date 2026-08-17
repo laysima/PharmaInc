@@ -66,13 +66,13 @@ export const Footer = () => {
 
   return (
     <footer style={{ width: "100%" }}>
-      <Box p={30} bg={"#003060"} color={"white"}>
+      <Box p={30} bg={"#082b48"} color={"white"}>
         <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} gap={20}>
           <Flex direction={"column"} fontSize={"20px"}>
             <Heading
               fontWeight={900}
-              fontFamily={'"PT Sans", sans-serif'}
               fontSize="30px"
+              color="white"
             >
               PharmaInc
             </Heading>
@@ -118,14 +118,14 @@ export const Footer = () => {
               Company
             </Heading>
             <Link
-              _hover={{ color: "#A45F66", transition: "0.2s" }}
+              _hover={{ color: "#78c8ff", transition: "0.2s" }}
               as={NextLink}
               href="/about"
             >
               About{" "}
             </Link>
             <Link
-              _hover={{ color: "#A45F66", transition: "0.2s" }}
+              _hover={{ color: "#78c8ff", transition: "0.2s" }}
               as={NextLink}
               href="/shop"
             >
@@ -133,7 +133,7 @@ export const Footer = () => {
             </Link>
             <Text>Privacy Policy</Text>
             <Link
-              _hover={{ color: "#A45F66", transition: "0.2s" }}
+              _hover={{ color: "#78c8ff", transition: "0.2s" }}
               as={NextLink}
               href="#section 1"
             >
@@ -150,28 +150,28 @@ export const Footer = () => {
               Help & Support
             </Heading>
             <Link
-              _hover={{ color: "#A45F66", transition: "0.2s" }}
+              _hover={{ color: "#78c8ff", transition: "0.2s" }}
               as={NextLink}
               href="/support"
             >
               Support
             </Link>            
             <Link
-              _hover={{ color: "#A45F66", transition: "0.2s" }}
+              _hover={{ color: "#78c8ff", transition: "0.2s" }}
               as={NextLink}
               href="/contact"
             >
               Contact Us
             </Link>
             <Link
-              _hover={{ color: "#A45F66", transition: "0.2s" }}
+              _hover={{ color: "#78c8ff", transition: "0.2s" }}
               as={NextLink}
               href="/login"
             >
               Login
             </Link>
             <Link
-              _hover={{ color: "#A45F66", transition: "0.2s" }}
+              _hover={{ color: "#78c8ff", transition: "0.2s" }}
               as={NextLink}
               href="#section 2"
             >
@@ -230,7 +230,7 @@ export const Footer = () => {
         />
         <Flex height={"3vh"} mt={10} alignItems={"center"}>
           <Flex p={5} direction={"column"} justifyContent={"center"}>
-            <Text fontFamily={'"PT Sans", sans-serif'} as={"b"}>
+            <Text as={"b"}>
               &copy; 2024 PharmaInc
             </Text>
           </Flex>
@@ -238,7 +238,7 @@ export const Footer = () => {
             border={"1px solid"}
             alignItems={"center"}
             orientation="vertical"
-            borderColor={"wwhite"}
+            borderColor={"white"}
             height={"3vh"}
           />
           <Text as={"b"} ml={3}>

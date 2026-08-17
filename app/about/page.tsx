@@ -38,7 +38,7 @@ const About = () => {
         <Flex p={30} gap={10}>
           <Box position={"relative"} display={{base:'none', md:'none', lg:'none'}}>
             <Box width={"600px"}>
-              <Image borderRadius={10} src="healthprof.jpg" w={"full"} alt="health"></Image>
+              <Image borderRadius={10} src="/m3.jpg" w={"full"} alt="health"></Image>
             </Box>
 
             <Box

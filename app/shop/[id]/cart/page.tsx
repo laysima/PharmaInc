@@ -20,7 +20,7 @@ import { GoDash } from "react-icons/go";
 import { GoLock } from "react-icons/go";
 import NextLink from "next/link";
 import { useState, useEffect } from "react";
-import { useCartStore } from "@/zustand/store";
+import { useCartStore } from "@/app/lib/store/store";
 import { BiX } from "react-icons/bi";
 import { useQuery } from "@tanstack/react-query";
 import { FiMinus } from "react-icons/fi";
@@ -65,7 +65,7 @@ const Cart = ({ params }: any) => {
           <Center
             flexDirection={"column"}
             p={20}
-            bgImage={"../../dna2.o.jpg"}
+            bgImage={"/dna2.o.jpg"}
             bgPos={"center"}
             textAlign={"center"}
             bgSize={"cover"}

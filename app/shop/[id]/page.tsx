@@ -1,10 +1,10 @@
 "use client";
-import { useCartStore } from "@/zustand/store";
+import { useCartStore } from "@/app/lib/store/store";
 import { useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { ProductType } from "@/schemas";
+import { ProductType } from "@/app/lib/schemas";
 import { FaAngleRight } from "react-icons/fa";
 import { IoStar } from "react-icons/io5";
 import { IoMdHeartEmpty, IoIosAdd, IoMdClose } from "react-icons/io";
@@ -137,7 +137,7 @@ const ProductDetail = ({ params }: any) => {
         <Center
           flexDirection={"column"}
           p={"100px"}
-          bgImage={"../../../dna2.o.jpg"}
+          bgImage={"/dna2.o.jpg"}
           textAlign={"center"}
           bgPos={"center"}
           bgSize={"cover"}
@@ -300,9 +300,9 @@ const ProductDetail = ({ params }: any) => {
                 </Flex>
 
                 <Flex alignItems={"center"} justifyContent={"space-between"}>
-                  <Image alt="image" boxSize={"30px"} src="../../cash.png"></Image>
-                  <Image alt="image" boxSize={"30px"} src="../../mastercard.jpeg"></Image>
-                  <Image alt="image" boxSize={"30px"} src="../../visa.png"></Image>
+                  <Image alt="image" boxSize={"30px"} src="/cash.png"></Image>
+                  <Image alt="image" boxSize={"30px"} src="/mastercard.jpeg"></Image>
+                  <Image alt="image" boxSize={"30px"} src="/visa.png"></Image>
                 </Flex>
               </Box>
             </Flex>

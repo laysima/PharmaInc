@@ -18,7 +18,7 @@ const ScrollProgressBar = () => {
       left={0}
       right={0}
       height="4px"
-      backgroundColor="blue.500"
+      backgroundColor="#0881DE"
       zIndex="banner"
     />
   );

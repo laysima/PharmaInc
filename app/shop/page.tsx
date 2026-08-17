@@ -27,7 +27,7 @@ import { FaHeart, FaAngleRight } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
 import PaginationControls from "@/app/components/PaginationControls";
 import { BiSearch } from "react-icons/bi";
-import { useCartStore } from "@/zustand/store";
+import { useCartStore } from "@/app/lib/store/store";
 import PageWrap from "../components/PageWrap";
 // import { GetProducts } from "@/app/api";
 import { focusManager, useQuery } from "@tanstack/react-query";
@@ -203,7 +203,7 @@ export default function Page({ searchParams, }: {
           <Center
             flexDirection={"column"}
             p={20}
-            bgImage={"../../dna2.o.jpg"}
+            bgImage={"/dna2.o.jpg"}
             bgPos={"center"}
             textAlign={"center"}
             bgSize={"cover"}
