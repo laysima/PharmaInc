@@ -134,7 +134,6 @@ const ForgotPassword = () => {
             <Text
               fontWeight={500}
               color={"#0881DE"}
-              fontFamily={'"Outfit", sans-serif'}
               fontSize={"3xl"}
             >
               {step === 1 ? "Forgot Password" : step === 2 ? "Enter OTP" : "Set New Password"}

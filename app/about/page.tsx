@@ -1,230 +1,119 @@
 "use client";
-import React from "react";
-import {
-  Flex,
-  Icon,
-  Heading,
-  Button,
-  Text,
-  Image,
-  Box,
-  Stack,
-  Input,
-  Link,
-  Divider,
-  Container,
-  SimpleGrid,
-  Circle,
-  VStack,
-} from "@chakra-ui/react";
-import { FaCheck } from "react-icons/fa";
+import { useState } from "react";
+import Image from "next/image";
 import NextLink from "next/link";
-import { TbDentalBroken } from "react-icons/tb";
-import { FaDumbbell } from "react-icons/fa";
-import { FaHandsHoldingChild } from "react-icons/fa6";
-import { MdOutlineHealthAndSafety } from "react-icons/md";
-import { motion, useScroll } from "framer-motion";
-import ScrollProgressBar from "../components/ScrollProgressBar";
+import Reveal from "../components/ui/Reveal";
+import GradientButton from "../components/ui/GradientButton";
+import StaggeredText from "../components/ui/StaggeredText";
+import BlurHighlight from "../components/ui/BlurHighlight";
+import PersonaTabs from "../components/ui/PersonaTabs";
 
-const About = () => {
-  // No need for eslint-disable comment as we're not using hooks here
+export default function About() {
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
 
   return (
     <>
-      {/* ///////////////////////////////some other section  part 1/////////////////////////*/}
-      <ScrollProgressBar/>
-      <Container maxW={1200} as={motion.div} initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}>
-        <Flex p={30} gap={10}>
-          <Box position={"relative"} display={{base:'none', md:'none', lg:'none'}}>
-            <Box width={"600px"}>
-              <Image borderRadius={10} src="/m3.jpg" w={"full"} alt="health"></Image>
-            </Box>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-white">
+        <div className="pointer-events-none absolute inset-0 bg-aurora" />
+        <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-24">
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
+            About PharmaInc
+          </p>
+          <StaggeredText
+            as="h1"
+            text="Excellent medical professionals with significant experience"
+            className="mt-4 max-w-3xl text-4xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-5xl"
+          />
+          <BlurHighlight
+            text="PharmaInc connects you with licensed pharmacists and same-day delivery, so getting the care you need never means waiting in line. Every order is reviewed by a real pharmacist before it ships."
+            highlight={["licensed pharmacists", "real pharmacist"]}
+            className="mt-6 max-w-2xl text-lg leading-8 text-slate-600"
+          />
+          <div className="mt-8">
+            <NextLink href="/shop">
+              <GradientButton>Shop now</GradientButton>
+            </NextLink>
+          </div>
+        </div>
+      </section>
 
-            <Box
-              pos={"absolute"}
-              bg={"#0881DE"}
-              color={"white"}
-              mt={"-200px"}
-              ml={-30}
-              p={7}
-              borderRadius={10}
-            >
-              <Flex alignItems={"center"} p={2} gap={2}>
-                <Icon color={"green"} as={FaCheck} />
-                <Text>General lab</Text>
-              </Flex>
-              <Divider orientation="vertical" border={"1px solid white"} />
+      {/* Persona tabs */}
+      <section className="bg-slate-50 py-20 sm:py-24">
+        <Reveal className="mx-auto max-w-2xl px-6 text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
+            Built for everyone in the loop
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+            Whoever you're caring for, we've got you covered
+          </h2>
+        </Reveal>
+        <div className="mt-12">
+          <PersonaTabs />
+        </div>
+      </section>
 
-              <Flex alignItems={"center"} p={2} gap={2}>
-                <Icon color={"green"} as={FaCheck} />
-                <Text>General Medicine</Text>
-              </Flex>
-              <Divider orientation="vertical" border={"1px solid white"} />
+      {/* Reach out */}
+      <section className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <Reveal>
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
+              Get in touch
+            </p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+              Reach out to our staff
+            </h2>
+            <p className="mt-4 max-w-md text-slate-600">
+              Questions about an order, a medication, or anything else? Send us
+              a message and a member of our team will get back to you.
+            </p>
 
-              <Flex alignItems={"center"} p={2} gap={2}>
-                <Icon color={"green"} as={FaCheck} />
-                <Text>Freee Delivery</Text>
-              </Flex>
-              <Divider orientation="vertical" border={"1px solid white"} />
+            {submitted ? (
+              <div className="mt-8 rounded-2xl bg-primary-50 p-6 text-primary-700">
+                Thanks — we've received your message and will be in touch shortly.
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+                <input
+                  required
+                  placeholder="Name"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary-400 focus:outline-none"
+                />
+                <input
+                  required
+                  type="email"
+                  placeholder="Email"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary-400 focus:outline-none"
+                />
+                <input
+                  required
+                  type="tel"
+                  placeholder="Phone number"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary-400 focus:outline-none"
+                />
+                <textarea
+                  required
+                  placeholder="How can we help?"
+                  rows={4}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary-400 focus:outline-none"
+                />
+                <GradientButton type="submit">Send message</GradientButton>
+              </form>
+            )}
+          </Reveal>
 
-              <Flex alignItems={"center"} p={2} gap={2}>
-                <Icon color={"green"} as={FaCheck} />
-                <Text>Pharmacy Support</Text>
-              </Flex>
-            </Box>
-          </Box>
-
-          <Flex direction={"column"} >
-            <Box>
-              <Text
-                mt={5}
-                mb={5}
-                fontWeight={500}
-                fontFamily={'"Outfit", sans-serif'}
-                fontSize={"3xl"}
-              >
-                Excellent Medical Professionals With Significant Experience
-              </Text>
-            </Box>
-            <Text mt={5} fontSize={"ll"}>
-              Tristique senectus et netus et malesuada fames ac turpis. Turpis
-              massa tincidunt dui ut ornare lectus sit amet. Viverra orci
-              sagittis eu volutpat odio facilisis mauris sit amet. Imperdiet
-              proin fermentum leo vel orci porta non pulvinar.
-            </Text>
-
-            <Text mt={5} fontSize={"ll"}>
-              Tristique senectus et netus et malesuada fames ac turpis. Turpis
-              massa tincidunt dui ut ornare lectus sit amet. Viverra orci
-              sagittis eu volutpat odio facilisis mauris sit amet. Imperdiet
-              proin fermentum leo vel orci porta non pulvinar.
-            </Text>
-
-            <Link as={NextLink} href="/">
-              <Button mt={5} width={"200px"} bgColor="#B8E0F7">
-                SHOP NOW
-              </Button>
-            </Link>
-          </Flex>
-        </Flex>
-
-        {/* /////////////////////////////// Core Values ///////////////////////////////////////*/}
-        <Box py={16} bg="gray.50">
-          <Container maxW="container.xl">
-            <VStack spacing={8} mb={12}>
-              <Heading
-                fontFamily='"Outfit", sans-serif'
-                color="#175873"
-                fontSize={{ base: "2xl", md: "3xl" }}
-                textAlign="center"
-              >
-                Our Core Values
-              </Heading>
-              <Text fontSize="lg" textAlign="center" maxW="2xl">
-                Mauris porttitor condimentum libero, quis elementum nisi tempor ut.
-                Nulla facilisi. Aenean ante nisl, cursus a pretium eget gravida eget sem. Nunc quis purus.
-              </Text>
-            </VStack >
-
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={8}>
-              {[
-                { icon: TbDentalBroken, title: "Medicines" },
-                { icon: FaHandsHoldingChild, title: "Beauty Care" },
-                { icon: MdOutlineHealthAndSafety, title: "Health Products" },
-                { icon: FaDumbbell, title: "Cardio Care" },
-              ].map((item, index) => (
-                <Box
-                  key={index}
-                  bg="white"
-                  borderRadius="lg"
-                  boxShadow="md"
-                  overflow="hidden"
-                  transition="transform 0.3s"
-                  _hover={{ transform: "translateY(-5px)" }}
-                >
-                  <VStack spacing={4} p={6}>
-                    <Circle size="80px" bg="#378ba4" color="white">
-                      <Icon as={item.icon} fontSize="3xl" />
-                    </Circle>
-                    <Heading
-                      fontFamily='"Outfit", sans-serif'
-                      fontSize="xl"
-                      color="#175873"
-                    >
-                      {item.title}
-                    </Heading>
-                    <Text fontSize="md" textAlign="center">
-                      Mauris porttitor condimentum libero, quis elementum nisi tempor ut. Nulla facilisi.
-                    </Text>
-                  </VStack>
-                </Box>
-              ))}
-            </SimpleGrid>
-          </Container>
-        </Box>
-
-        {/* /////////////////////////////// Staff Reach Out/////////////////////////*/}
-        <Flex mt={20} gap={10} pb={10}>
-          <Flex direction={"column"}>
-            <Text
-            fontWeight={500}
-              fontSize={"3xl"}
-            >
-              Reach Out To Our Staff
-            </Text>
-            <Text mt={5} fontSize={"l"}>
-              Tristique senectus et netus et malesuada fames ac turpis. Turpis
-              massa tincidunt dui ut ornare lectus sit amet. Viverra orci
-              sagittis eu volutpat odio facilisis mauris sit amet. Imperdiet
-              proin fermentum leo vel orci porta non pulvinar.
-            </Text>
-
-            <Stack spacing={5} mt={5} border={"0px"}>
-              <Input
-                placeholder="Name*"
-                h={"7.5vh"}
-                variant={"filled"}
-                borderRadius={"none"}
-                border={"none"}
-              />
-              <Input
-                placeholder="Email*"
-                h={"7.5vh"}
-                variant={"filled"}
-                borderRadius={"none"}
-                border={"none"}
-              />
-              <Input
-                placeholder="Phone Number*"
-                type="tel"
-                h={"7.5vh"}
-                variant={"filled"}
-                borderRadius={"none"}
-                border={"none"}
-              />
-              <Input
-                placeholder="Comment*"
-                h={"7.5vh"}
-                variant={"filled"}
-                borderRadius={"none"}
-                border={"none"}
-              />
-            </Stack>
-
-            <Button
-              borderRadius={"none"}
-              mt={5}
-              colorScheme="blackAlpha"
-            >
-              SEND
-            </Button>
-          </Flex>
-          <Image display={{base:'none', md:'none', lg:'flex'}} src="/reach.jpg" alt="reach" mr={12} height={"70vh"}></Image>
-        </Flex>
-      </Container>
+          <Reveal delay={0.1}>
+            <div className="relative h-[420px] w-full overflow-hidden rounded-[2rem] shadow-card">
+              <Image src="/reach.jpg" alt="Our pharmacy staff" fill className="object-cover" />
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </>
   );
-};
-
-export default About;
+}

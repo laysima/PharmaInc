@@ -62,14 +62,16 @@ const Signup = () => {
        status: 'success',
        isClosable: true,
      })
-     setLoading(false)
-     } 
+     }
      catch (e:any) {
        toast({
          title: e.message,
          status: 'error',
          isClosable: true,
        })
+     }
+     finally {
+       setLoading(false)
      }
   }
 
@@ -96,7 +98,6 @@ const Signup = () => {
             <Text
               fontWeight={500}
               color={"#0881DE"}
-              fontFamily={'"Outfit", sans-serif'}
               fontSize={"3xl"}
             >
               Sign Up

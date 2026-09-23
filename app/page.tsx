@@ -3,47 +3,33 @@ import { useState } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import { getCookie } from "cookies-next";
 
-import ScrollProgressBar from "./components/ScrollProgressBar";
 import Reveal from "./components/ui/Reveal";
 import AuroraBackground from "./components/ui/AuroraBackground";
 import GradientButton from "./components/ui/GradientButton";
 import BentoCard from "./components/ui/BentoCard";
 import Counter from "./components/ui/Counter";
-import Marquee from "./components/ui/Marquee";
+import SpotlightTestimonial from "./components/ui/SpotlightTestimonial";
+import ChatbotLauncher from "./components/ChatbotLauncher";
+import FeatureShowcase from "./components/FeatureShowcase";
 
 import {
-  FaCheckCircle,
   FaDumbbell,
   FaChevronDown,
 } from "react-icons/fa";
 import { FaHandsHoldingChild } from "react-icons/fa6";
-import { TbDentalBroken, TbActivityHeartbeat } from "react-icons/tb";
-import { LiaHeartbeatSolid } from "react-icons/lia";
+import { TbDentalBroken } from "react-icons/tb";
 import { MdOutlineHealthAndSafety } from "react-icons/md";
-import { PiHandshakeLight } from "react-icons/pi";
-import { IoMdHeartEmpty } from "react-icons/io";
-import { GoPersonAdd } from "react-icons/go";
-import { IoTrophyOutline } from "react-icons/io5";
+import { FiArrowUpRight } from "react-icons/fi";
 
 import "./globals.css";
-
-const DynamicChatbot = dynamic(() => import("./components/Chatbot"), { ssr: false });
 
 const stats = [
   { value: 123, suffix: "+", label: "Professional Staff" },
   { value: 587, suffix: "+", label: "Kind Of Medicine" },
   { value: 40, suffix: "+", label: "Doctor Specialists" },
   { value: 12, suffix: "+", label: "Active Members" },
-];
-
-const trustStats = [
-  { icon: PiHandshakeLight, value: 200, suffix: "k+", label: "Happy clients" },
-  { icon: IoMdHeartEmpty, value: 50, suffix: "k+", label: "Orders delivered" },
-  { icon: GoPersonAdd, value: 80, suffix: "+", label: "Areas served" },
-  { icon: IoTrophyOutline, value: 5, suffix: "L", label: "Medicines" },
 ];
 
 const services = [
@@ -64,21 +50,21 @@ const testimonials = [
   {
     name: "Shakur",
     country: "Ghana",
-    image: "/w1.jpg",
+    image: "/optimized/w1.jpg",
     review:
       "PharmaInc is a game-changer. It's easy to use, fast, and reliable — I can order my medications in a few clicks.",
   },
   {
     name: "Calvin",
     country: "United Kingdom",
-    image: "/m2.jpg",
+    image: "/optimized/m2.jpg",
     review:
       "The interface is intuitive and delivery is always on time. Managing my prescriptions has never been easier.",
   },
   {
     name: "Jessie",
     country: "United States",
-    image: "/m1.jpg",
+    image: "/optimized/m1.jpg",
     review:
       "As someone with chronic health issues, recurring orders and reminders mean I never run out of essentials.",
   },
@@ -117,8 +103,6 @@ export default function Home() {
 
   return (
     <>
-      <ScrollProgressBar />
-
       {/* Hero */}
       <section className="relative overflow-hidden bg-white">
         <AuroraBackground />
@@ -145,24 +129,31 @@ export default function Home() {
                 <NextLink href="/shop">
                   <GradientButton>Shop Now</GradientButton>
                 </NextLink>
-                <DynamicChatbot />
+                <ChatbotLauncher />
               </div>
             </Reveal>
 
             <Reveal delay={0.15}>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { src: "/sick1.jpg", y: 0 },
-                  { src: "/sick5.jpg", y: 24 },
-                  { src: "/sick3.jpg", y: 24 },
-                  { src: "/sick4.jpg", y: 0 },
+                  { src: "/optimized/sick1.jpg", y: 0 },
+                  { src: "/optimized/sick5.jpg", y: 24 },
+                  { src: "/optimized/sick3.jpg", y: 24 },
+                  { src: "/optimized/sick4.jpg", y: 0 },
                 ].map((img, i) => (
                   <div
                     key={i}
                     className="relative aspect-square overflow-hidden rounded-2xl shadow-card"
                     style={{ marginTop: img.y }}
                   >
-                    <Image src={img.src} alt="" fill sizes="200px" className="object-cover" />
+                    <Image
+                      src={img.src}
+                      alt=""
+                      fill
+                      priority={i < 2}
+                      sizes="(min-width: 1024px) 280px, 42vw"
+                      className="object-cover"
+                    />
                   </div>
                 ))}
               </div>
@@ -174,7 +165,13 @@ export default function Home() {
       {/* Banner + stats */}
       <section className="relative">
         <div className="relative h-[360px] w-full overflow-hidden md:h-[420px]">
-          <Image src="/hbeds.jpg" alt="" fill className="object-cover" />
+          <Image
+            src="/optimized/hbeds.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-primary-950/80 via-primary-900/50 to-transparent" />
           <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-center px-6 text-white">
             <Reveal>
@@ -195,15 +192,15 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mx-auto -mt-10 hidden max-w-5xl px-6 md:block">
+        <div className="relative z-20 mx-auto -mt-12 hidden max-w-5xl px-6 md:block">
           <Reveal>
-            <div className="grid grid-cols-4 divide-x divide-slate-100 rounded-2xl bg-white p-8 shadow-card">
+            <div className="grid grid-cols-4 divide-x divide-slate-100 rounded-[2rem] bg-white px-8 py-7 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.35)]">
               {stats.map((s) => (
-                <div key={s.label} className="text-center">
-                  <p className="text-3xl font-semibold text-primary-600">
+                <div key={s.label} className="px-3 text-center">
+                  <p className="text-3xl font-semibold leading-none text-primary-600">
                     <Counter value={s.value} suffix={s.suffix} />
                   </p>
-                  <p className="mt-1 text-sm text-slate-500">{s.label}</p>
+                  <p className="mt-3 text-sm text-slate-500">{s.label}</p>
                 </div>
               ))}
             </div>
@@ -222,28 +219,37 @@ export default function Home() {
           </h2>
         </Reveal>
 
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:auto-rows-[170px]">
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:auto-rows-[180px]">
           {[
-            { img: "/koflet_coughMixture.png", eyebrow: "Special offers on", title: "Cough Syrup", span: "md:row-span-2" },
-            { img: "/vitamins.png", eyebrow: "Multivitamin tablets", title: "Get 20% off", span: "md:row-span-2" },
-            { img: "/paracetamol2.jpg", eyebrow: "30% discount on", title: "Paracetamol", span: "md:col-span-2" },
-            { img: "/sth.jpg", eyebrow: "30% discount on", title: "Stethoscope kits", span: "" },
-            { img: "/capsules.jpg", eyebrow: "Bundle deal on", title: "Cough Syrup", span: "" },
+            { img: "/koflet_coughMixture.png", badge: "SPECIAL OFFER", title: "Cough Syrup", span: "md:row-span-2" },
+            { img: "/vitamins.png", badge: "20% OFF", title: "Multivitamin tablets", span: "md:row-span-2" },
+            { img: "/optimized/paracetamol2.jpg", badge: "30% OFF", title: "Paracetamol", span: "md:col-span-2" },
+            { img: "/optimized/sth.jpg", badge: "30% OFF", title: "Stethoscope kits", span: "" },
+            { img: "/optimized/capsules.jpg", badge: "BUNDLE DEAL", title: "Cough Syrup", span: "" },
           ].map((offer, i) => (
             <Reveal key={offer.title + i} delay={i * 0.06} className={offer.span}>
-              <BentoCard className="relative h-40 w-full md:h-full">
-                <Image src={offer.img} alt={offer.title} fill className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                  <p className="text-xs font-medium uppercase tracking-wide text-primary-200">
-                    {offer.eyebrow}
-                  </p>
-                  <p className="mt-1 text-lg font-semibold">{offer.title}</p>
+              <BentoCard className="relative h-44 w-full md:h-full">
+                <div className="absolute inset-0 overflow-hidden">
+                  <Image
+                    src={offer.img}
+                    alt={offer.title}
+                    fill
+                    sizes="(min-width: 768px) 25vw, 50vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/25 to-transparent" />
+                <span className="absolute left-4 top-4 rounded-full bg-primary-500 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-glow">
+                  {offer.badge}
+                </span>
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5 text-white">
+                  <p className="text-lg font-semibold leading-tight">{offer.title}</p>
                   <NextLink
                     href="/shop"
-                    className="mt-2 inline-block text-xs font-semibold text-white underline decoration-primary-300 underline-offset-4"
+                    className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-primary-700 transition-transform duration-200 hover:scale-110"
+                    aria-label={`Shop ${offer.title}`}
                   >
-                    Shop now
+                    <FiArrowUpRight />
                   </NextLink>
                 </div>
               </BentoCard>
@@ -252,53 +258,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Professionals split */}
-      <section className="bg-primary-50/40 py-24">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-2">
-          <Reveal>
-            <div className="inline-block rounded-xl bg-primary-600 px-6 py-4 text-white shadow-glow">
-              <p className="font-semibold">
-                Excellent medical professionals with significant experience
-              </p>
-            </div>
-            <p className="mt-6 text-lg text-slate-600">
-              Our team blends clinical expertise with genuine care, so every
-              consultation and every order is handled with the attention it deserves.
-            </p>
-            <NextLink href="/shop">
-              <GradientButton variant="outline" className="mt-2">
-                Shop Now
-              </GradientButton>
-            </NextLink>
-
-            <div className="mt-10 grid grid-cols-2 gap-8">
-              {trustStats.map((item) => (
-                <div key={item.label} className="flex items-center gap-4">
-                  <item.icon className="text-3xl text-primary-600" />
-                  <div>
-                    <p className="text-2xl font-semibold text-primary-900">
-                      <Counter value={item.value} suffix={item.suffix} />
-                    </p>
-                    <p className="text-sm text-slate-500">{item.label}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.15}>
-            <div className="relative">
-              <div className="relative h-[420px] w-full overflow-hidden rounded-3xl shadow-card">
-                <Image src="/m3.jpg" alt="Medical professionals" fill className="object-cover" />
-              </div>
-              <div className="absolute -right-6 -top-8 flex h-40 w-40 flex-col items-center justify-center rounded-full bg-white text-center shadow-card">
-                <p className="text-2xl font-bold text-primary-600">Trusted+</p>
-                <p className="text-sm text-slate-600">Company</p>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {/* Alternating product features */}
+      <FeatureShowcase />
 
       {/* Services */}
       <section className="mx-auto max-w-6xl px-6 py-24">
@@ -340,15 +301,18 @@ export default function Home() {
               <Reveal key={cat.title} delay={i * 0.08}>
                 <NextLink
                   href="/shop"
-                  className="group flex flex-col items-center gap-4 rounded-2xl bg-white p-6 shadow-card transition-shadow hover:shadow-glow"
+                  className="group flex flex-col items-center gap-5 rounded-[1.75rem] border border-slate-100 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-glow"
                 >
-                  <div className="relative h-32 w-32 overflow-hidden rounded-full">
-                    <Image
-                      src={cat.image}
-                      alt={cat.title}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
+                  <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-primary-50 to-primary-100 transition-transform duration-300 group-hover:scale-105">
+                    <div className="relative h-20 w-20">
+                      <Image
+                        src={cat.image}
+                        alt={cat.title}
+                        fill
+                        sizes="80px"
+                        className="object-contain drop-shadow-sm"
+                      />
+                    </div>
                   </div>
                   <p className="font-semibold text-slate-800">{cat.title}</p>
                 </NextLink>
@@ -360,20 +324,29 @@ export default function Home() {
 
       {/* FAQ */}
       <section className="mx-auto max-w-6xl px-6 py-24">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+        <div className="grid gap-12 lg:grid-cols-[0.9fr,1.4fr]">
           <Reveal>
-            <div className="relative hidden h-[420px] w-full overflow-hidden rounded-3xl shadow-card md:block">
-              <Image src="/questions.jpg" alt="" fill className="object-cover" />
+            <div className="lg:sticky lg:top-28">
+              <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
+                FAQ
+              </p>
+              <h2 className="mt-2 text-3xl font-semibold text-slate-900 sm:text-4xl">
+                Frequently asked questions
+              </h2>
+              <p className="mt-4 max-w-sm text-slate-600">
+                Can't find what you're looking for? Reach out and a member of
+                our team will get back to you.
+              </p>
+              <NextLink
+                href="/contact"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-700"
+              >
+                Contact us <FiArrowUpRight />
+              </NextLink>
             </div>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">
-              FAQ
-            </p>
-            <h2 className="mt-2 mb-8 text-3xl font-semibold text-slate-900 sm:text-4xl">
-              Frequently asked questions
-            </h2>
             <div className="space-y-3">
               {faqItems.map((item) => (
                 <div key={item.id} className="overflow-hidden rounded-2xl bg-slate-50">
@@ -423,21 +396,7 @@ export default function Home() {
         </div>
 
         <div className="mt-12">
-          <Marquee>
-            {testimonials.map((t) => (
-              <div
-                key={t.name}
-                className="flex w-80 shrink-0 flex-col items-center rounded-2xl bg-white/5 p-6 text-center backdrop-blur"
-              >
-                <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-primary-400">
-                  <Image src={t.image} alt={t.name} fill className="object-cover" />
-                </div>
-                <p className="mt-4 font-semibold text-white">{t.name}</p>
-                <p className="text-sm text-primary-300">{t.country}</p>
-                <p className="mt-3 text-sm text-primary-100">&quot;{t.review}&quot;</p>
-              </div>
-            ))}
-          </Marquee>
+          <SpotlightTestimonial items={testimonials} />
         </div>
       </section>
     </>

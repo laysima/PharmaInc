@@ -90,7 +90,6 @@ const Login = () => {
               <Text
                 fontWeight={500}
                 color={"#0881DE"}
-                fontFamily={'"Outfit", sans-serif'}
                 fontSize={"3xl"}
               >
                 Sign In

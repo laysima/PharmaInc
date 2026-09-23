@@ -7,7 +7,7 @@ const EvidenceArray = z.object({
 })
 
 export const LoginSchema = z.object({
-    email: z.string({required_error:'Required'}),
+    email: z.string({required_error:'Required'}).email('Invalid email address'),
     password: z.string({required_error:'Required'}),
 })
 

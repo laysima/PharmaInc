@@ -87,10 +87,11 @@ const History: React.FC = () => {
   };
 
   const { data: orders, isPending, isRefetching } = useQuery({
-    queryKey: ['getOrderHistory'], 
+    queryKey: ['getOrderHistory', nUser?.email],
     queryFn: () => orderHistory({
       customerEmail: nUser.email
-    })
+    }),
+    enabled: Boolean(nUser?.email),
   })
 
   const filteredOrders = orders?.filter((order:any) => 

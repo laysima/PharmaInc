@@ -91,7 +91,7 @@ export const Navbar = () => {
   /////////////////////////// search button available keywords////////////////////////////////////////////
 
   return (
-    <Box position={"sticky"} top={0} zIndex={10}>
+    <Box>
 
       <Box
         style={{

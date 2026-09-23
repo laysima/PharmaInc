@@ -7,6 +7,11 @@ const client = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 })
 
+const getErrorMessage = (e: any): string => {
+    if (!e?.response) return 'Unable to connect. Please check your connection and try again.'
+    return e.response?.data?.error?.message ?? 'Something went wrong. Please try again.'
+}
+
 export const LoginUser = async ({ email, password }: LoginType) => {
     const URL = '/v1/user/login';
     try {
@@ -17,7 +22,7 @@ export const LoginUser = async ({ email, password }: LoginType) => {
 
         return data
     } catch (e: any) {
-        throw new Error(e.response.data.error.message)
+        throw new Error(getErrorMessage(e))
     }
 
 }
@@ -29,7 +34,7 @@ export const SendOtp = async ({ email }: { email: string }) => {
                 
         return { data: response.data.data, success: response.data.success }
     } catch (e: any) {
-        throw new Error(e.response.data.error.message)
+        throw new Error(getErrorMessage(e))
     }
 }
 
@@ -39,7 +44,7 @@ export const VerifyOtp = async ({ email, code }: { email: string, code: string }
         const response = await client.post(URL, { email, code })
         return { data: response.data.data, success: response.data.success }
     } catch (e: any) {
-        throw new Error(e.response.data.error.message)
+        throw new Error(getErrorMessage(e))
     }
 }
 
@@ -48,7 +53,7 @@ export const ResetPassword = async ({ email, newPassword }: { email: string, new
     try {
         const response = await client.post(URL, { email, newPassword })
         return { data: response.data.data, success: response.data.success }    } catch (e: any) {
-        throw new Error(e.response.data.error.message)
+        throw new Error(getErrorMessage(e))
     }
 }
 
@@ -62,7 +67,7 @@ export const SignInUser = async ({ name, email, password }: SignupType) => {
         setCookie('user', JSON.stringify(data))
         return response.data.data
     } catch (e: any) {
-        throw new Error(e.response.data.error.message)
+        throw new Error(getErrorMessage(e))
     }
 
 }
@@ -83,7 +88,7 @@ export const ParseInitialRequest = async ({ age, sex, text }: ParseInitialReques
         
         return data
     } catch (e: any) {
-        throw new Error(e.response.data.error.message)
+        throw new Error(getErrorMessage(e))
     }
 }
 
@@ -104,7 +109,7 @@ export const GetDiagnosis = async ({ age, sex, text, evidence }: DiagnosisReques
         
         return data
     } catch (e: any) {
-        throw new Error(e.response.data.error.message)
+        throw new Error(getErrorMessage(e))
     }
 }
 
@@ -117,7 +122,7 @@ export const orderHistory = async ({ customerEmail }: {customerEmail:string}) =>
         
         return data
     } catch (e: any) {
-        throw new Error(e.response.data.error.message)
+        throw new Error(getErrorMessage(e))
     }
 }
 
@@ -136,9 +141,7 @@ export const CreateOrder = async ({ customerEmail, products, totalCost }: Create
         
         return data
     } catch (e: any) {
-        console.log('ERROR FROM CREATE', e.response.data)
-
-        throw new Error(e.response.data.error.message)
+        throw new Error(getErrorMessage(e))
     }
 }
 

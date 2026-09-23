@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Flex,
   Button,
@@ -38,7 +38,7 @@ import { MdCheckCircle } from 'react-icons/md';
 import { IoIosFemale, IoIosMale } from "react-icons/io";
 import TermsOfService from './TermsOfService';
 import { FaCircleArrowUp } from 'react-icons/fa6';
-import axios from 'axios';
+import { ParseInitialRequest, GetDiagnosis } from '../lib/api-client';
 
 interface Evidence {
   id: string;
@@ -58,7 +58,12 @@ interface Question {
   }>;
 }
 
-const Chatbot = () => {
+interface ChatbotProps {
+  autoOpen?: boolean;
+  showLaunchers?: boolean;
+}
+
+const Chatbot = ({ autoOpen = false, showLaunchers = true }: ChatbotProps) => {
   const [age, setAge] = useState('');
   const [sex, setSex] = useState('');
   const [symptoms, setSymptoms] = useState('');
@@ -78,11 +83,9 @@ const Chatbot = () => {
   const btnRef = useRef<HTMLButtonElement>(null);
   const toast = useToast();
 
-  const headers = {
-    'App-Id': '5121be20',
-    'App-Key': '19bec17ce7f699fc0ce1a4da40155808',
-    'Content-Type': 'application/json',
-  };
+  useEffect(() => {
+    if (autoOpen) onOpen();
+  }, [autoOpen, onOpen]);
 
   function validateAge(age: string) {
     const ageInt = parseInt(age);
@@ -92,17 +95,9 @@ const Chatbot = () => {
   const startDiagnosis = async () => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        'https://api.infermedica.com/v3/parse',
-        { 
-          text: symptoms,
-          age: { value: parseInt(age) },
-          sex: sex
-        },
-        { headers }
-      );
+      const response = await ParseInitialRequest({ age, sex, text: symptoms });
 
-      const initialEvidence = response.data.mentions.map((mention: any) => ({
+      const initialEvidence = response.mentions.map((mention: any) => ({
         id: mention.id,
         choice_id: 'present',
         source: 'initial',
@@ -125,26 +120,18 @@ const Chatbot = () => {
   const getDiagnosis = async (currentEvidence: Evidence[]) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        'https://api.infermedica.com/v3/diagnosis',
-        {
-          sex,
-          age: { value: parseInt(age) },
-          evidence: currentEvidence,
-        },
-        { headers }
-      );
+      const response = await GetDiagnosis({ age, sex, text: symptoms, evidence: currentEvidence });
 
-      if (response.data.should_stop || (response.data.conditions && response.data.conditions[0].probability > 0.8)) {
-        const topCondition = response.data.conditions[0];
+      if (response.should_stop || (response.conditions && response.conditions[0].probability > 0.8)) {
+        const topCondition = response.conditions[0];
         const diagnosisMessage = `Based on the information provided, the most likely condition is ${topCondition.name} (${(topCondition.probability * 100).toFixed(2)}% probability).`;
         setDiagnosis(diagnosisMessage);
         setChatHistory([...chatHistory, `Bot: ${diagnosisMessage}\n\nDisclaimer: This is not a substitute for professional medical advice. Please consult with a healthcare provider for an accurate diagnosis and appropriate treatment.`]);
         setQuestion(null);
         setStep(6); // Move to the final step
-      } else if (response.data.question) {
-        setQuestion(response.data.question);
-        setChatHistory([...chatHistory, `Bot: ${response.data.question.text}`]);
+      } else if (response.question) {
+        setQuestion(response.question);
+        setChatHistory([...chatHistory, `Bot: ${response.question.text}`]);
         setStep(5); // Move to the interview step
       }
     } catch (error) {
@@ -419,20 +406,25 @@ const Chatbot = () => {
 
   return (
     <>
-      <Button ref={btnRef} onClick={onOpen} colorScheme="blue" variant="outline" borderRadius={5}>
-        Chat With A HealthCare Bot
-      </Button>
-      <Flex position="fixed" bottom="80px" right="20px" zIndex="50">
-        <IconButton
-          aria-label="Open Chatbot"
-          icon={<HiOutlineChatBubbleLeftRight />}
-          ref={btnRef}
-          colorScheme='blue'
-          outline={'white'}
-          onClick={onOpen}
-          borderRadius={"50%"}
-          size={"lg"}
-        />
+      {showLaunchers && (
+        <>
+          <Button ref={btnRef} onClick={onOpen} colorScheme="blue" variant="outline" borderRadius={5}>
+            Chat With A HealthCare Bot
+          </Button>
+          <Flex position="fixed" bottom="80px" right="20px" zIndex="50">
+            <IconButton
+              aria-label="Open Chatbot"
+              icon={<HiOutlineChatBubbleLeftRight />}
+              ref={btnRef}
+              colorScheme='blue'
+              outline={'white'}
+              onClick={onOpen}
+              borderRadius={"50%"}
+              size={"lg"}
+            />
+          </Flex>
+        </>
+      )}
         <Drawer
           size={'lg'}
           isOpen={isOpen}
@@ -480,7 +472,6 @@ const Chatbot = () => {
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
-      </Flex>
     </>
   );
 };

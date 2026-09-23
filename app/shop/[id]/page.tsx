@@ -89,30 +89,32 @@ const ProductDetail = ({ params }: any) => {
 
 
   const doubleSubtotal = () => {
-    setCounter((prevCounter) => prevCounter + 1); // Increase the sequential number
+    const newCounter = counter + 1;
+    setCounter(newCounter);
     add_to_cart({
       id: product.id,
       imageUrl: product.image,
       name: product.name,
       description: product.description,
       price: product.price,
-      quantity: counter,
+      quantity: newCounter,
       currency: "",
-      subtotal: product.price * counter,
+      subtotal: product.price * newCounter,
     });
   };
 
   const halveSubtotal = () => {
-    setCounter((prevCounter) => Math.max(1, prevCounter - 1));
+    const newCounter = Math.max(1, counter - 1);
+    setCounter(newCounter);
     add_to_cart({
       id: product.id,
       imageUrl: product.image,
       name: product.name,
       description: "",
       price: product.price,
-      quantity: counter,
+      quantity: newCounter,
       currency: "",
-      subtotal: product.price * counter,
+      subtotal: product.price * newCounter,
     });
   };
 
@@ -145,7 +147,6 @@ const ProductDetail = ({ params }: any) => {
         >
           <Skeleton isLoaded={!isLoading}>
           <Heading
-            fontFamily={'"Outfit", sans-serif'}
             color={"white"}
             fontSize={"5xl"}
           >
@@ -343,7 +344,6 @@ const ProductDetail = ({ params }: any) => {
                     <Flex direction={"column"} gap={4}>
                       <Heading
                         fontSize={"lg"}
-                        fontFamily={'"Outfit", sans-serif'}
                       >
                         {formatString(product?.name)}
                       </Heading>
